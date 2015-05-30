@@ -16,6 +16,8 @@
 package server
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 
@@ -23,6 +25,12 @@ import (
 )
 
 func TestLoginHandler(t *testing.T) {
+	w := httptest.NewRecorder()
+	r, _ := http.NewRequest("GET", "/login", nil)
+	GetRouter().ServeHTTP(w, r)
+	if w.Code != 404 {
+		t.Error("GET request should not be allowed. Code:", w.Code)
+	}
 }
 
 func TestGetRouter(t *testing.T) {
