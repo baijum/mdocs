@@ -22,13 +22,12 @@ import (
 	"testing"
 
 	"github.com/baijum/mdocs/server"
-	"github.com/codegangsta/negroni"
 )
 
 func TestHomeHandler(t *testing.T) {
 	w := httptest.NewRecorder()
 	router := server.GetRouter()
-	n := negroni.Classic()
+	n := server.EmberClassic("web/dist")
 	r, _ := http.NewRequest("GET", "/", nil)
 	n.UseHandler(router)
 	n.ServeHTTP(w, r)

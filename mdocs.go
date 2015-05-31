@@ -16,13 +16,17 @@
 package main
 
 import (
+	"flag"
+
 	"github.com/baijum/mdocs/server"
-	"github.com/codegangsta/negroni"
 )
 
+var web = flag.String("web", "web/dist", "Web UI directory")
+
 func serve() {
+	flag.Parse()
 	r := server.GetRouter()
-	n := negroni.Classic()
+	n := server.EmberClassic(*web)
 	n.UseHandler(r)
 	n.Run(":3001")
 }

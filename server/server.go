@@ -18,6 +18,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 )
 
@@ -29,4 +30,16 @@ func GetRouter() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/login", loginHandler).Methods("POST")
 	return r
+}
+
+// EmberClassic returns a new Negroni instance with the default
+// middleware already in the stack.
+//
+// Recovery - Panic Recovery Middleware
+// Logger - Request/Response Logging
+// Static - Static File Serving
+func EmberClassic(dir string) *negroni.Negroni {
+	return negroni.New(negroni.NewRecovery(),
+		negroni.NewLogger(),
+		negroni.NewStatic(http.Dir(dir)))
 }
