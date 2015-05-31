@@ -1,0 +1,6 @@
+/* Customize container */
+@media (min-width: 568px) {
+  .container-narrow {
+    max-width: 530px;
+  }
+}

@@ -16,19 +16,40 @@
 package server
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 )
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
+type User struct {
+	Fullname string `json:"fullname"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	TOC      bool   `json:"toc"`
+}
+
+func signInHandler(w http.ResponseWriter, r *http.Request) {
+}
+
+func signUpHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Content-Type", "application/json")
+	var u map[string]User
+
+	decoder := json.NewDecoder(r.Body)
+	decoder.Decode(&u)
+	log.Printf("%#v", u)
 }
 
 // Router for the URL endpoints
 func GetRouter() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/login", loginHandler).Methods("POST")
+	r.HandleFunc("/api/v1/signin", signInHandler).Methods("POST")
+	r.HandleFunc("/api/v1/signup", signUpHandler).Methods("POST")
 	return r
 }
 
