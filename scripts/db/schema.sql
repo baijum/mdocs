@@ -7,6 +7,8 @@ CREATE TABLE "member" (
        password BYTEA NOT NULL,
        salt BYTEA NOT NULL,
        fullname TEXT NOT NULL,
+       verified BOOLEAN DEFAULT false,
+       active BOOLEAN DEFAULT false,
        created_at TIMESTAMP DEFAULT now(),
        update_at TIMESTAMP DEFAULT now()
 );

@@ -19,18 +19,36 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/gorilla/mux"
 )
 
-func TestLoginHandler(t *testing.T) {
+func TestSignInHandler(t *testing.T) {
+	cleanDB()
 	w := httptest.NewRecorder()
-	r, _ := http.NewRequest("GET", "/login", nil)
+	b := `{"member": {"fullname": "Baiju Muthukadan", "username": "baijum",
+                "email": "baiju.m.mail@gmail.com", "password": "passwd"}}`
+	r, _ := http.NewRequest("POST", "/api/v1/signup", strings.NewReader(b))
 	GetRouter().ServeHTTP(w, r)
-	if w.Code != 404 {
-		t.Error("GET request should not be allowed. Code:", w.Code)
-	}
+
+	w = httptest.NewRecorder()
+	b = `{"member": {"username": "baijum",
+                "password": "passwd"}}`
+	r, _ = http.NewRequest("POST", "/api/v1/signin", strings.NewReader(b))
+	GetRouter().ServeHTTP(w, r)
+	closeDB()
+}
+
+func TestSignUpHandler(t *testing.T) {
+	cleanDB()
+	w := httptest.NewRecorder()
+	b := `{"member": {"fullname": "Baiju Muthukadan", "username": "baijum",
+                "email": "baiju.m.mail@gmail.com", "password": "passwd"}}`
+	r, _ := http.NewRequest("POST", "/api/v1/signup", strings.NewReader(b))
+	GetRouter().ServeHTTP(w, r)
+	closeDB()
 }
 
 func TestGetRouter(t *testing.T) {
@@ -39,4 +57,22 @@ func TestGetRouter(t *testing.T) {
 	if reflect.TypeOf(r) != reflect.TypeOf(router) {
 		t.Error("Router type is not matching *mux.Router")
 	}
+}
+
+func TestOpenDB(t *testing.T) {
+	cleanDB()
+	if err := DB.Ping(); err != nil {
+		t.Error("DB not connecting")
+	}
+	closeDB()
+}
+
+func cleanDB() {
+	OpenDB()
+	DB.Query(`DELETE FROM "doc"`)
+	DB.Query(`DELETE FROM "member"`)
+}
+
+func closeDB() {
+	DB.Close()
 }

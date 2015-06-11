@@ -13,6 +13,16 @@ links will be publicly accessible.  User can edit and delete
 documentation pages.  When the source text is no more availale, the
 documentation link will return 404 Not Found status.
 
+## Configuration
+
+```bash
+export MDOCS_POSTGRES_USER=baiju
+export MDOCS_POSTGRES_PASSWORD=passwd
+export MDOCS_POSTGRES_DBNAME=mdocs
+export MDOCS_POSTGRES_SSLMODE=disable
+export MDOCS_RANDOM_SALT=randomsalt
+```
+
 ## Contribute!
 
 This project is looking for contributions.  If you are interested to

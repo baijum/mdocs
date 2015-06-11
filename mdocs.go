@@ -32,5 +32,7 @@ func serve() {
 }
 
 func main() {
+	server.OpenDB()
+	defer server.DB.Close()
 	serve()
 }
